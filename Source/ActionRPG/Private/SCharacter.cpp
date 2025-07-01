@@ -24,12 +24,15 @@ ASCharacter::ASCharacter()
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
+	// Control rotation and character rotation are different
+	// Control rotation is for the camera 
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
 
 	// Configure character movement
+	// Rotate the character to face the direction of movement not the direction of the camera
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 600.0f, 0.0f);
 	GetCharacterMovement()->JumpZVelocity = 500.f;
@@ -39,7 +42,8 @@ ASCharacter::ASCharacter()
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 400.0f; // The camera follows at this distance behind the character
-	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
+	// Rotate the camera based on the controller's rotation
+	CameraBoom->bUsePawnControlRotation = true;
 
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
@@ -88,7 +92,9 @@ void ASCharacter::DoMove(float Right, float Forward)
 	if (Controller != nullptr)
 	{
 
-		// Get the forward and right vectors of the character
+		// Get the control rotation from the controller
+		// Use the control rotation to determine the forward and right directions
+		// The character will move in the direction of the control rotation
 		const FRotator ControlRotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, ControlRotation.Yaw, 0);
 
@@ -104,7 +110,8 @@ void ASCharacter::DoLook(float Yaw, float Pitch)
 {
 	if (GetController() != nullptr)
 	{
-		// add yaw and pitch input to controller
+		// Controller rotation is seperate from character rotation
+		// This allows the camera to rotate independently of the character's movement using the controller's rotation
 		AddControllerYawInput(Yaw);
 		AddControllerPitchInput(Pitch);
 	}
