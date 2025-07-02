@@ -37,10 +37,19 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* JumpAction; // Input action for jumping
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* PrimaryAttackAction; // Input action for primary attack
+
 	// Gets the values from the InputAction struct and passes them to the movement functions
 	void Move(const FInputActionValue& Value); 
 
 	void Look(const FInputActionValue& Value); 
+
+	// Actions
+	void PrimaryAttack(); // Executes the primary attack action
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> ProjectileClass; // Class of the primary attack actor
 
 protected:
 
