@@ -103,6 +103,8 @@ void ASCharacter::PrimaryAttack()
 
 	// Spawning actors is always done through the world context object
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform, SpawnParams);
+
+	PlayAnimMontage(PrimaryAttackAnimMontage);
 }
 
 void ASCharacter::PrimaryInteract()

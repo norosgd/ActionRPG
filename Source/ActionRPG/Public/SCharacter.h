@@ -12,6 +12,7 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 class USInteractionComponent;
+class UAnimMontage;
 
 
 UCLASS()
@@ -56,6 +57,9 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> ProjectileClass; // Class of the primary attack actor
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* PrimaryAttackAnimMontage; // Animation montage for primary attack
 
 protected:
 
