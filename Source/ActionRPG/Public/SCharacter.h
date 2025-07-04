@@ -11,6 +11,7 @@ class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
+class USInteractionComponent;
 
 
 UCLASS()
@@ -38,7 +39,10 @@ protected:
 	UInputAction* JumpAction; // Input action for jumping
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputAction* PrimaryAttackAction; // Input action for primary attack
+	UInputAction* PrimaryAttackAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* InteractAction; // Input action for interacting with objects
 
 	// Gets the values from the InputAction struct and passes them to the movement functions
 	void Move(const FInputActionValue& Value); 
@@ -47,6 +51,8 @@ protected:
 
 	// Actions
 	void PrimaryAttack(); // Executes the primary attack action
+
+	void PrimaryInteract();
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> ProjectileClass; // Class of the primary attack actor
@@ -59,6 +65,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	UCameraComponent* FollowCamera; // Follow camera
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+	USInteractionComponent* InteractionComponent; // Interaction component for interacting with objects in the world
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 

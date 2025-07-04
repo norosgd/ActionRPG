@@ -12,6 +12,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "InputAction.h"
+#include "SInteractionComponent.h"
 
 
 
@@ -48,6 +49,8 @@ ASCharacter::ASCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 
+	InteractionComponent = CreateDefaultSubobject<USInteractionComponent>(TEXT("InteractionComponent"));
+
 }
 
 // Called to bind functionality to input
@@ -72,6 +75,7 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ASCharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ASCharacter::StopJumping);
 		EnhancedInputComponent->BindAction(PrimaryAttackAction, ETriggerEvent::Started, this, &ASCharacter::PrimaryAttack);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &ASCharacter::PrimaryInteract);
 	}
 }
 
@@ -99,6 +103,14 @@ void ASCharacter::PrimaryAttack()
 
 	// Spawning actors is always done through the world context object
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform, SpawnParams);
+}
+
+void ASCharacter::PrimaryInteract()
+{
+	if (InteractionComponent != nullptr)
+	{
+		InteractionComponent->PrimaryInteract();
+	}
 }
 
 void ASCharacter::DoMove(float Right, float Forward)
